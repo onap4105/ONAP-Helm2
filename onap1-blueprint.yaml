@@ -51,6 +51,23 @@ node_types:
               default: *fabric_env
 
 node_templates:
+
+# Helm Input Overides
+# In each ONAP app overide / add the following parameters
+
+# IO_helm:
+#     type: Cloudify.modes.SoftwareComponent
+#     interfaces:       
+#         cloudify.interfaces.lifecycle:
+#             srtart: 
+#                implementation: fabric.fabric_plugin.tasks.run_script
+#                inputs: 
+#                    script_path:
+#                         overide_inputs.sh
+#                    arsgs: { onap-inputs.yaml, values.yaml }
+
+
+
 # This is a Agent-solution or a fabric solution.
   k8s_master:
      type: cloudify.nodes.Compute
@@ -70,6 +87,17 @@ node_templates:
     relationships:
       - type: cloudify.relationships.connected_to
         target: k8s_master 
+
+  appc:
+     type: cloudify.nodes.Helm
+     properties:
+       args:
+       - onap 
+       - appc 
+     relationships:
+       - type: cloudify.relationships.connected_to
+         target: k8s_master
+
   
 #  policy:
 #    type: cloudify.nodes.Helm
