@@ -59,7 +59,7 @@ node_templates:
 #     type: Cloudify.modes.SoftwareComponent
 #     interfaces:       
 #         cloudify.interfaces.lifecycle:
-#             srtart: 
+#             start: 
 #                implementation: fabric.fabric_plugin.tasks.run_script
 #                inputs: 
 #                    script_path:
@@ -77,6 +77,16 @@ node_templates:
          install_method: { get_input: install_method } # False for Fabric.
          key: { get_secret: agent_key_private }
          user: { get_input: user }
+         
+#  onap_config:
+#     type: cloudify.nodes.SoftwareComponent
+#     interfaces:       
+#         cloudify.interfaces.lifecycle:
+#             start: 
+#                implementation: fabric.fabric_plugin.tasks.run_script
+#                inputs: 
+#                    script_path:
+#                         createConfig.sh
 
   mso:
     type: cloudify.nodes.Helm
@@ -87,6 +97,8 @@ node_templates:
     relationships:
       - type: cloudify.relationships.connected_to
         target: k8s_master 
+#      - type: cloudify.relationships.connected_to
+#        target: onap_config
 
   appc:
      type: cloudify.nodes.Helm
